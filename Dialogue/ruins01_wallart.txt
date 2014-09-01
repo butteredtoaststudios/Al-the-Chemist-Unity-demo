@@ -1,0 +1,3 @@
+01| "What’s with the hieroglyphics?  Quiet as a ...well, we’re not allowed to say words like tomb| BEGIN 
+01| in this game.  Wait, I just said it.  Whoops."| NEXT
+01| | END

@@ -1,0 +1,2 @@
+01| "Oooh..... Duct tape! Best friend, I missed you so."| BEGIN
+01| | END

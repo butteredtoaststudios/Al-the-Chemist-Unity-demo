@@ -1,0 +1,2 @@
+01| “Wait a minute.  I have a sink and a shower head.... Why did I have to make my own water?”| BEGIN
+01| | END

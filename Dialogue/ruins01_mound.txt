@@ -1,0 +1,2 @@
+01| "Is there something sticking out of that mound?  Better not look too closely at that."| BEGIN
+01| | END

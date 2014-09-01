@@ -1,0 +1,2 @@
+04| "That’s an awful lot of fire in here.  I’m still alive aren’t I?"| BEGIN
+04| | END

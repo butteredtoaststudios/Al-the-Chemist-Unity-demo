@@ -1,0 +1,8 @@
+05| "Narrator:  This man, who will emerge as the one who beat them all."| BEGIN
+05| "Narrator:  This man, who emerges once every millenium. This man, who..."| NEXT
+01| "Al: What are you doing?"| NEXT
+05| "Narrator:  I'm, uh, just telling them about the, um, rise of mad scientists..."| NEXT
+03| "Al: Mad scientists?"| NEXT
+05| "Narrator:  Yeah, um, you know, the ones you see in movies and on TV. #In other words, YOU."| NEXT
+03| "Oh, for the love of... okay look, my name is Al. I'm a chemist on the verge #of a major breakthrough."| NEXT
+01| ""| END

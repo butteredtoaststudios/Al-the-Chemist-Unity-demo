@@ -1,0 +1,2 @@
+01| "I assume this is the Molecular Re-constructor."| BEGIN
+01| | END

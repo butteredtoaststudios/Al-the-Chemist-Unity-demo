@@ -1,0 +1,2 @@
+03| "Oh great, the elevator isn’t working.  Better take the stairs."| BEGIN
+03| | END

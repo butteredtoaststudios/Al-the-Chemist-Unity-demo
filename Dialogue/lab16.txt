@@ -1,0 +1,2 @@
+01| "Great.  I can’t get out unless I put out this fire.  I’m going to need WATER for this.| BEGIN
+01|  Wait, didn’t I just make some?"| END

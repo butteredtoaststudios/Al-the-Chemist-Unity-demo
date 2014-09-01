@@ -1,0 +1,2 @@
+01| "Oh boy.  Long way down. Heh."| BEGIN
+01| | END

@@ -1,0 +1,2 @@
+01| "Rocks are boring.  Er, no offense to any geologists out there."| BEGIN
+01| | END

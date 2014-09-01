@@ -1,0 +1,4 @@
+01| "You there!  Do you know what this is?  This could be one of the most important inventions | BEGIN
+01| in history.  It has the ability to take raw elements and combine them into any compounds | NEXT
+01| imaginable.  That’s what I’m working on.  This is the Chemical Bond Sequencer, and it will | NEXT
+01| change the face of the world... if I can just get it to work."| END

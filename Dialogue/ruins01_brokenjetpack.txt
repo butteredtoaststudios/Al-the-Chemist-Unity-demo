@@ -1,0 +1,2 @@
+01| "Oh geez.  You know, I'm not actually a rocket scientist."| BEGIN
+01| | END

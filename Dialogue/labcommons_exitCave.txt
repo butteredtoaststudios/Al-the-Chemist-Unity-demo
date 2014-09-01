@@ -1,0 +1,2 @@
+01| "Great, I get to leave my own lab through a hole in the wall.  Could this day get any better?"| BEGIN
+01| | END

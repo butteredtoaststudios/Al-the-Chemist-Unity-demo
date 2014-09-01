@@ -1,0 +1,2 @@
+01| "Ok, why is this labeled “Zip-zap menu! Points you where you want to go!”?"| BEGIN
+01| | END

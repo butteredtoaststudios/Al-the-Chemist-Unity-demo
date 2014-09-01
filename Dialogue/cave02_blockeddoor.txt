@@ -1,0 +1,2 @@
+01| "Hmmm.  This looks like it needs to be bashed open. Time for some violent science!"| BEGIN
+01| | END

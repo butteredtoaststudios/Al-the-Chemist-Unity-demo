@@ -1,0 +1,3 @@
+01| "Oh.... That looks like a.....um....well.  Is it really OK to use the carbon here?  I don’t| BEGIN
+01| suppose anyone will mind."| NEXT
+01| | END

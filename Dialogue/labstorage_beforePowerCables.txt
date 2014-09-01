@@ -1,0 +1,2 @@
+01| "What is this?  Gummy worms?  What?"| BEGIN
+01| | END

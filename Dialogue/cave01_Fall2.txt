@@ -1,0 +1,2 @@
+02| "Oh come on!  I was totally standing on that ledge!"| BEGIN
+02| | END

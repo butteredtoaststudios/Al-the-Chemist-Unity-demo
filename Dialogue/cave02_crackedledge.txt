@@ -1,0 +1,2 @@
+01| "Well, that doesn’t look too safe."| BEGIN
+01| | END

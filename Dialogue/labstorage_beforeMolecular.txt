@@ -1,0 +1,2 @@
+01| "Really? This item is labeled “Zip-zap pad!  It goes ziiiip and then zap, and then you go poof!”"| BEGIN
+01| | END

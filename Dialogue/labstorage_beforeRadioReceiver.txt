@@ -1,0 +1,2 @@
+01| "What’s this?  Hrmm.  Do I take it with me? When in doubt, keep gizmo’s for later.| BEGIN
+01| Never bad having another gadget."| END

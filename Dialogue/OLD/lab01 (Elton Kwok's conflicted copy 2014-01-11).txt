@@ -1,0 +1,2 @@
+01| "Uh, excuse me. Excuse me, but what are you doing?"| BEGIN
+01| | END
