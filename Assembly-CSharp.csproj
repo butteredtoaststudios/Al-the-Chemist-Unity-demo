@@ -5,7 +5,7 @@
 	<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
-	<ProjectGuid>{2377E39C-E6F7-D676-69F0-C39AF7E9C749}</ProjectGuid>
+	<ProjectGuid>{8EDC0EE2-8184-0035-672C-5C1F23784646}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<RootNamespace></RootNamespace>
@@ -46,20 +46,21 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Test\AlScript.cs" />
-     <Compile Include="Assets\Test\ChangeRoomScript.cs" />
-     <Compile Include="Assets\Test\HealthScript.cs" />
+     <Compile Include="Assets\_Scripts\AlScript.cs" />
+     <Compile Include="Assets\_Scripts\ChangeRoomScript.cs" />
      <Compile Include="Assets\_Scripts\GUI Scripts\DialogScript.cs" />
      <Compile Include="Assets\_Scripts\GUI Scripts\ElementInterfaceScript.cs" />
-     <Compile Include="Assets\_Scripts\StartMenuScripts\OptionMenu.cs" />
-     <Compile Include="Assets\_Scripts\StartMenuScripts\StartMenu.cs" />
-     <Compile Include="Assets\_Scripts\StartMenuScripts\Walk.cs" />
+     <Compile Include="Assets\_Scripts\HealthScript.cs" />
+     <Compile Include="Assets\_Scripts\Start Scripts\OptionMenu.cs" />
+     <Compile Include="Assets\_Scripts\Start Scripts\StartMenu.cs" />
+     <Compile Include="Assets\_Scripts\Start Scripts\Walk.cs" />
      <Compile Include="Assets\_Scripts\loadDialog.cs" />
      <Compile Include="Assets\_Scripts\loadSceneInfo.cs" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Particle Shaders\Mobile Multiply Culled.shader" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Miscellaneous Shaders\Mobile Background.shader" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Vertex Colored Shaders\Mobile Transparent Vertex Color.shader" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Miscellaneous Shaders\Mobile Detail.shader" />
+     <None Include="Assets\Resource\Assets\Al Sprite\running-[onfire]\onfire_directions.txt" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Lightmap Shaders (Legacy)\Mobile Lightmap Reflective.shader" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Particle Shaders\Mobile Particles Additive Culled.shader" />
      <None Include="Assets\Standard Assets (Mobile)\Shaders\Vertex Colored Shaders\Mobile Vertex Colored.shader" />
