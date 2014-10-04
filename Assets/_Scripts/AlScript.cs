@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿
+using UnityEngine;
 using System.Collections;
 
 public class AlScript : MonoBehaviour {
@@ -27,16 +28,12 @@ public class AlScript : MonoBehaviour {
 	private Vector3 startClimbPosition = Vector3.zero;
 
 	private BoxCollider2D alCollider;
-
-	private int playerHealth = 5;
-
-	void Awake() {
-		DontDestroyOnLoad(Camera.main);
-		DontDestroyOnLoad(transform.gameObject);
-	}
+	globalObject go;
 
 	// Use this for initialization
 	void Start () {
+
+		go = GameObject.Find("GlobalObject").GetComponent<globalObject>();
 		alCollider = gameObject.GetComponent<BoxCollider2D>();
 	}
 	
@@ -65,10 +62,11 @@ public class AlScript : MonoBehaviour {
 	{
 		if(Input.GetKey(KeyCode.LeftArrow))
 		{
-			if(gameObject.transform.position.x - moveSpeed > 0.0f)
+			if(Camera.main.WorldToScreenPoint(gameObject.transform.position).x - moveSpeed > 0)//Camera.main.GetComponent<SmoothFollow2D>())
 				gameObject.transform.position = new Vector3(gameObject.transform.position.x - moveSpeed, gameObject.transform.position .y, gameObject.transform.position .z);
 
-			gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 180, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
+	//		gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 180, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
+			go.playerFaceRight = false;
 			updateImage();
 			spriteRender.sprite = AlSprite[(imageIndex + 1) % AlSprite.Length];
 		}
@@ -76,7 +74,8 @@ public class AlScript : MonoBehaviour {
 		{
 			if(Camera.main.WorldToScreenPoint(gameObject.transform.position).x - moveSpeed < Screen.width)
 				gameObject.transform.position = new Vector3(gameObject.transform.position.x + moveSpeed, gameObject.transform.position .y, gameObject.transform.position .z);
-			gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 0, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
+	//		gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 0, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
+			go.playerFaceRight = true;
 			updateImage();
 			spriteRender.sprite = AlSprite[(imageIndex + 1) % AlSprite.Length];
 		}
@@ -84,13 +83,18 @@ public class AlScript : MonoBehaviour {
 		{
 			spriteRender.sprite = AlIdle;
 		}
+
+		if(go.playerFaceRight)
+			gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 0, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
+		else
+			gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 180, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
 	}
-	
+
 	private void onJumpKey()
 	{
 
 		if(Input.GetKeyDown(KeyCode.Space) && !isJumping && onGround)
-		{	
+		{
 			isJumping = true;
 		}
 		if(Input.GetKeyUp(KeyCode.Space))
@@ -173,11 +177,6 @@ public class AlScript : MonoBehaviour {
 		climbBottom = false;
 	}
 
-	public int _Health
-	{
-		get{return playerHealth;}
-		set{playerHealth = value;}
-	}
 
 	void updateImage()
 	{
@@ -209,7 +208,12 @@ public class AlScript : MonoBehaviour {
 
 		if (coll.gameObject.tag == "Ground")
 		{	
-			onGround = true;
+			if(gameObject.transform.position.y < coll.gameObject.transform.position.y)
+			{	
+				isJumping = false;
+			}
+			else
+				onGround = true;
 
 			if(climbBottom)
 				isClimb = false;
