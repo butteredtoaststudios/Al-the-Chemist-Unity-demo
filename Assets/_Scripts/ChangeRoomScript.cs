@@ -84,7 +84,7 @@ public class ChangeRoomScript : MonoBehaviour {
 			if(currentRoom == "04_Cave01")
 			{
 				go.playerFaceRight = true;
-				return new Vector3(4.638611f + shift.x, 1.6f + shift.y, 0f);
+				return new Vector3(-12.48f + shift.x, 1.279999f + shift.y, 0f);
 			}
 			else if(currentRoom == "05_Ruins")
 			{

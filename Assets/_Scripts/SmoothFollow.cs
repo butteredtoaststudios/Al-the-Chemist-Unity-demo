@@ -13,6 +13,8 @@ public class SmoothFollow : MonoBehaviour {
 
 	private float boundX;
 	private float boundY;
+
+	public bool toUpdateCamera = true; 
 	
 	void Start()
 	{
@@ -33,41 +35,14 @@ public class SmoothFollow : MonoBehaviour {
 		}
 		else
 		{
-			if(Mathf.SmoothDamp( thisTransform.position.x, target.position.x, ref velocity.x, smoothTime)  > -boundX &&
-			   Mathf.SmoothDamp( thisTransform.position.x, target.position.x, ref velocity.x, smoothTime)  < boundX)
-			{
-				float newX = Mathf.SmoothDamp( thisTransform.position.x, target.position.x, ref velocity.x, smoothTime);
-
-				thisTransform.position = new Vector3(newX, thisTransform.position.y, thisTransform.position.z);
-			}
-			else if(Mathf.SmoothDamp( thisTransform.position.x, target.position.x, ref velocity.x, smoothTime)  <= -boundX)
-				thisTransform.position = new Vector3(-boundX, thisTransform.position.y, thisTransform.position.z);
-			else 
-				thisTransform.position = new Vector3(boundX, thisTransform.position.y, thisTransform.position.z);
-
-
-			if(Mathf.SmoothDamp( thisTransform.position.y,target.position.y, ref velocity.y, smoothTime)  < boundY &&
-			   Mathf.SmoothDamp( thisTransform.position.y,target.position.y, ref velocity.y, smoothTime)  > -boundY)
-			{	
-				float newY = Mathf.SmoothDamp( thisTransform.position.y, target.position.y, ref velocity.y, smoothTime);	
-				thisTransform.position = new Vector3(thisTransform.position.x, newY, thisTransform.position.z);
-			}
-			else if(Mathf.SmoothDamp( thisTransform.position.y,target.position.y, ref velocity.y, smoothTime)  > boundY)
-				thisTransform.position = new Vector3(thisTransform.position.x, boundY, thisTransform.position.z);
-			else
-				thisTransform.position = new Vector3(thisTransform.position.x, -boundY, thisTransform.position.z);
+			if(toUpdateCamera)
+				updateCamera(target.transform.position);
 		}
 	}
 
 
 	public void updateCamera(Vector3 newPosition)
-	{
-		if(target == null)
-		{
-			if(GameObject.FindGameObjectWithTag("Player") != null)
-				target = GameObject.FindGameObjectWithTag("Player").transform;
-		}
-		
+	{	
 		if(Mathf.SmoothDamp( thisTransform.position.x, newPosition.x, ref velocity.x, smoothTime)  > -boundX &&
 		   Mathf.SmoothDamp( thisTransform.position.x, newPosition.x, ref velocity.x, smoothTime)  < boundX)
 		{
