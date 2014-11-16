@@ -5,6 +5,9 @@ public class MapDatabase : MonoBehaviour {
 
 	public MapLocation[,] mapData= new MapLocation[11,6];
 
+	public int xSelected = 0;
+	public int ySelected = 3;
+
 	// Use this for initialization
 	//void Start () {
 	

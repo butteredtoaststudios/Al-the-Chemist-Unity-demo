@@ -78,6 +78,142 @@ public class Map : MapDatabase {
 
 	public void getInput()
 	{
+		if(Input.GetKeyDown(KeyCode.RightArrow))
+		{
+			bool isFound = false;
+			int i=xSelected+1;
+			int j=ySelected;
+			
+			while( isFound == false && (i<11 && j<6) )
+			{
+				if(mapData[i,j].hasBeenFound == true)
+				{
+					mapData[xSelected,ySelected].isSelected = false;
+					
+					xSelected = i;
+					ySelected = j;
+					
+					mapData[xSelected,ySelected].isSelected = true;
+					
+					isFound = true;
+				}
+				else
+				{
+					if(i == 10)
+					{						
+						//isFound = true;
+						j+=1;
+						i=0;
+					}
+					else
+					{
+						i+=1;
+					}
+				}
+			}	
+		}
+		else if(Input.GetKeyDown(KeyCode.LeftArrow))
+		{
+			bool isFound = false;
+			int i=xSelected-1;
+			int j=ySelected;
+			
+			while( isFound == false && (i>=0 && j>=0) )
+			{
+				if(mapData[i,j].hasBeenFound == true)
+				{
+					mapData[xSelected,ySelected].isSelected = false;
+					
+					xSelected = i;
+					ySelected = j;
+					
+					mapData[xSelected,ySelected].isSelected = true;
+					
+					isFound = true;
+				}
+				else
+				{
+					if(i == 0)
+					{						
+						//isFound = true;
+						j-=1;
+						i=5;
+					}
+					else
+					{
+						i-=1;
+					}
+				}
+			}	
+		}
+		else if(Input.GetKeyDown(KeyCode.DownArrow))
+		{
+			bool isFound = false;
+			int i=xSelected;
+			int j=ySelected+1;
+			
+			while( isFound == false && (i<11 && j<6) )
+			{
+				if(mapData[i,j].hasBeenFound == true)
+				{
+					mapData[xSelected,ySelected].isSelected = false;
+					
+					xSelected = i;
+					ySelected = j;
+					
+					mapData[xSelected,ySelected].isSelected = true;
+					
+					isFound = true;
+				}
+				else
+				{
+					if(i == 10)
+					{						
+						//isFound = true;
+						j+=1;
+						i=0;
+					}
+					else
+					{
+						i+=1;
+					}
+				}
+			}	
+		}
+		else if(Input.GetKeyDown(KeyCode.UpArrow))
+		{
+			bool isFound = false;
+			int i=xSelected;
+			int j=ySelected-1;
+			
+			while( isFound == false && (i>=0 && j>=0) )
+			{
+				if(mapData[i,j].hasBeenFound == true)
+				{
+					mapData[xSelected,ySelected].isSelected = false;
+					
+					xSelected = i;
+					ySelected = j;
+					
+					mapData[xSelected,ySelected].isSelected = true;
+					
+					isFound = true;
+				}
+				else
+				{
+					if(i == 10)
+					{						
+						//isFound = true;
+						j-=1;
+						i=0;
+					}
+					else
+					{
+						i+=1;
+					}
+				}
+			}	
+		}
 
 	}
 }
