@@ -1,2 +1,0 @@
-01| "Okay, I'm going to need some parts from the counter over there."| BEGIN
-01| | END

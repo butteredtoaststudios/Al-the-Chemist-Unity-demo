@@ -5,20 +5,20 @@ using System.Collections;
 public class AlScript : MonoBehaviour {
 
 	public GUISkin alGUI;
+	public bool freezeAl = false;
 	public float moveSpeed = 0.04f;
 	public float imageSpeed = 0.2f;
 	public float climbSpeed = 0.01f;
 	public float maxJumpHeight = 1.25f;
 
 	public Sprite AlIdle;
-	public Sprite[] AlSprite;
-	public Sprite[] AlClimb;
+	public AlSpriteList AlSprites;
 	public SpriteRenderer spriteRender;
 
 	private float time;
 	private int imageIndex = 0;
 	private bool isJumping = false;
-	private bool onGround = true;
+	private bool onGround = false;
 	private Vector3 startJumpPosition = Vector3.zero;
 
 	private bool isClimb = false;
@@ -32,10 +32,9 @@ public class AlScript : MonoBehaviour {
 	public BoxCollider2D AlColliderLeft;
 	public BoxCollider2D AlColliderBottom;
 	public BoxCollider2D AlColliderTop;
-
-	bool hitLeftRight = false;
-
+	
 	globalObject go;
+	Inventory AlInventory;
 
 	private bool updateImageReverse = false;
 
@@ -43,51 +42,56 @@ public class AlScript : MonoBehaviour {
 	void Start () {
 
 		go = GameObject.Find("GlobalObject").GetComponent<globalObject>();
+		AlSprites = gameObject.GetComponent<AlSpriteList>();
+
+		AlInventory = go.GetComponent<Inventory>();
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-		if(!isClimb && !climbReverse)
+		if(!freezeAl)
 		{
-			onWalkKey();
-			onJumpKey();
+			if(!isClimb && !climbReverse)
+			{
+				onWalkKey();
+				onJumpKey();
+			}
+
+			if(climbReverse)
+				climbRevFunc();
+
+			if(isClimb && !climbStart)
+			{
+				climbStartClimbFunc();
+			}
+			if(isClimb && (climbStart || climbBottom))
+				onClimbKey();
 		}
-
-		if(climbReverse)
-			climbRevFunc();
-
-		if(isClimb && !climbStart)
-		{
-			climbStartClimbFunc();
-		}
-		if(isClimb && (climbStart || climbBottom))
-			onClimbKey();
-
 		updateImage(updateImageReverse);
 	}
 
 	private void onWalkKey()
 	{
-		if(Input.GetKey(KeyCode.LeftArrow))
+		if(Input.GetKey(KeyList.keyRight))
 		{
 			if(Camera.main.WorldToScreenPoint(gameObject.transform.position).x - moveSpeed > 0)//Camera.main.GetComponent<SmoothFollow2D>())
 				gameObject.transform.position = new Vector3(gameObject.transform.position.x - moveSpeed, gameObject.transform.position .y, gameObject.transform.position .z);
 			go.playerFaceRight = false;
 
-			spriteRender.sprite = AlSprite[(imageIndex + 1) % AlSprite.Length];
+			AlSprites.playAnimation("walk");
 		}
-		else if(Input.GetKey(KeyCode.RightArrow))
+		else if(Input.GetKey(KeyList.keyLeft))
 		{
 			if(Camera.main.WorldToScreenPoint(gameObject.transform.position).x - moveSpeed < Screen.width)
 				gameObject.transform.position = new Vector3(gameObject.transform.position.x + moveSpeed, gameObject.transform.position .y, gameObject.transform.position .z);
 			go.playerFaceRight = true;
 
-			spriteRender.sprite = AlSprite[(imageIndex + 1) % AlSprite.Length];
+			AlSprites.playAnimation("walk");
 		}
 		else
 		{
-			spriteRender.sprite = AlIdle;
+			AlSprites.playAnimation("idle");
 		}
 
 		if(go.playerFaceRight)
@@ -96,7 +100,57 @@ public class AlScript : MonoBehaviour {
 			gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 180, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
 	}
 
+	//y = v0 * t - 0.5f g * (t * t)
+	float vy_0;
+	float timeTotal = 0;
+
+	private float timeSpeed = 0.016f;
+	private float gravity = 16.4f;
+	private float height = 0.14f;
+	private float y = 0;
 	private void onJumpKey()
+	{
+		if(Input.GetKeyDown(KeyList.keyJump) && !isJumping && onGround)
+		{
+			onGround = false;
+			isJumping = true;
+			timeTotal = 0.0f;
+		}
+		if(Input.GetKeyUp(KeyList.keyJump) && !onGround)
+		{
+			isJumping = false;
+			timeTotal = 0;
+			vy_0 = 0;
+			gravity = 16.4f;
+		}
+
+		if(Input.GetKeyDown(KeyList.keyJump) && isJumping)
+		{
+			timeTotal = 0;
+			gravity = 16.4f;
+			vy_0 = Mathf.Sqrt(height * 2 * gravity);
+		}
+		else if(onGround)
+		{
+			timeTotal = 0;
+			gravity = 0;
+			vy_0 = 0;
+		}
+
+		timeTotal += timeSpeed;	
+		y = (vy_0 * timeTotal) - 0.5f*(gravity * (timeTotal* timeTotal));
+	
+		gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + y, gameObject.transform.position .z);
+	}
+
+	/*
+	 * 		timeTotal += timeSpeed;
+			vy_0 = Mathf.Sqrt(height * 2 * gravity);
+			y = (vy_0 * timeTotal) - 0.5f*(gravity * (timeTotal* timeTotal));
+
+*/
+
+	private void onJumpKey(int ignore)
 	{
 		if(Input.GetKeyDown(KeyCode.Space) && !isJumping && onGround)
 		{
@@ -107,19 +161,21 @@ public class AlScript : MonoBehaviour {
 			isJumping = false;
 		}
 		
-		if(Input.GetKey(KeyCode.Space) && isJumping)
+		if(Input.GetKey(KeyList.keyJump) && isJumping)
 		{
 			if(onGround)
 			{
 				startJumpPosition = gameObject.transform.position;
 				onGround = false;
 			}
-			
+
+			//float y = (4 * Time.deltaTime) - (0.5f * 9.8f * (Time.deltaTime * Time.deltaTime));
+			//float x = Time.deltaTime;
+
 			if(gameObject.transform.position.y < (startJumpPosition.y + maxJumpHeight))
 				gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + moveSpeed, gameObject.transform.position .z);
 			else 
 				isJumping = false;
-			
 		}
 
 		else if(!onGround)
@@ -133,19 +189,19 @@ public class AlScript : MonoBehaviour {
 		if(Input.GetKey(KeyCode.DownArrow))
 		{
 			gameObject.transform.position = new Vector3(startClimbPosition.x - 0.089f, gameObject.transform.position.y - climbSpeed, startClimbPosition.z);
-			spriteRender.sprite = AlClimb[imageIndex%4 + 2];
+			spriteRender.sprite = AlSprites.AlClimb[imageIndex%4 + 2]; //AlClimb[imageIndex%4 + 2];
 		}
 
 		if(Input.GetKey(KeyCode.UpArrow))
 		{
 			gameObject.transform.position = new Vector3(startClimbPosition.x - 0.089f, gameObject.transform.position.y + climbSpeed, startClimbPosition.z);
-			spriteRender.sprite = AlClimb[imageIndex%4 + 2];
+			spriteRender.sprite = AlSprites.AlClimb[imageIndex%4 + 2];
 		}
 	}
 
 	private void climbStartClimbFunc()
 	{
-		spriteRender.sprite = AlClimb[imageIndex];
+		spriteRender.sprite = AlSprites.AlClimb[imageIndex]; //AlClimb[imageIndex];
 
 		if(imageIndex == 0)
 			gameObject.transform.position = new Vector3(startClimbPosition.x, startClimbPosition.y - 0.090f, startClimbPosition.z);
@@ -164,23 +220,23 @@ public class AlScript : MonoBehaviour {
 	private void climbRevFunc()
 	{
 		if(imageIndex > 0)
-			spriteRender.sprite = AlClimb[imageIndex];
+			spriteRender.sprite = AlSprites.AlClimb[imageIndex]; 
 
 		if(imageIndex == 1)
 		{	
-			spriteRender.sprite = AlClimb[imageIndex];
+			spriteRender.sprite = AlSprites.AlClimb[imageIndex]; 
 			gameObject.transform.position = new Vector3(startClimbPosition.x, startClimbPosition.y - 0.365349f - 0.090f, startClimbPosition.z);
 		}
 		else if(imageIndex == 0)
 		{	
-			spriteRender.sprite = AlClimb[imageIndex];
+			spriteRender.sprite = AlSprites.AlClimb[imageIndex]; 
 			gameObject.transform.position = new Vector3(startClimbPosition.x, startClimbPosition.y - 0.090f, startClimbPosition.z);
 		}
 		else if(imageIndex < 0)
 		{
 			spriteRender.sprite = AlIdle;
 
-			gameObject.transform.position = new Vector3(gameObject.transform.position.x, startClimbPosition.y + 0.4f, startClimbPosition.z);
+			gameObject.transform.position = new Vector3(gameObject.transform.position.x, startClimbPosition.y + 0.3f, startClimbPosition.z);
 
 			climbReverse = false;
 			climbStart = false;
@@ -205,54 +261,69 @@ public class AlScript : MonoBehaviour {
 		time += Time.deltaTime;
 	}
 
+	//Collision objects response 
+	//Ground
+	//Rocks
+	//Slopes
+	//Crates
+	//Doors
 
+	void stopFall(Collider2D coll, string groundObj)
+	{
+		if(coll.gameObject.tag == groundObj)
+			onGround = true;
+	}
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		if(coll.gameObject.renderer != null)
+		if (coll.gameObject.renderer != null) 
 		{
-			if(AlColliderRight.bounds.Intersects(coll.gameObject.renderer.bounds))
-			{	if(coll.gameObject.tag == "Ground")
-					gameObject.transform.position = new Vector3(gameObject.transform.position.x + moveSpeed + 0.01f, gameObject.transform.position .y, gameObject.transform.position .z);
-				hitLeftRight = true;
-			}
-			if(AlColliderLeft.bounds.Intersects(coll.gameObject.renderer.bounds))
-			{	if(coll.gameObject.tag == "Ground")
-					gameObject.transform.position = new Vector3(gameObject.transform.position.x + moveSpeed + 0.01f, gameObject.transform.position .y, gameObject.transform.position .z);
-				hitLeftRight = true;
-			}
+			if(coll.gameObject.tag == "Ground")
+				groundCollision (coll);
 		}
 
-		if(coll.gameObject.tag =="LadderBottom")
-			climbBottom = true;
-		
-		if (coll.gameObject.tag == "Ground")// && !hitLeftRight)
-		{	
+		if(climbBottom)
+			isClimb = false;
+
+		if(coll.gameObject.tag == "Elements")
+			selectElements(coll.gameObject);
+	}
+
+	void groundCollision(Collider2D coll)
+	{
+		if(AlColliderTop.bounds.Intersects(coll.gameObject.GetComponent<Collider2D>().bounds))
+		{
+			onGround = false;
+			isJumping = false;
+		}
+
+		if(AlColliderRight.bounds.Intersects(coll.gameObject.GetComponent<Collider2D>().bounds))
+		{
+			gameObject.transform.position = new Vector3(gameObject.transform.position.x - moveSpeed - 0.01f, gameObject.transform.position .y, gameObject.transform.position .z);
+		}
+
+		if(AlColliderLeft.bounds.Intersects(coll.gameObject.GetComponent<Collider2D>().bounds))
+		{
+			gameObject.transform.position = new Vector3(gameObject.transform.position.x + moveSpeed + 0.01f, gameObject.transform.position .y, gameObject.transform.position .z);
+		}
+
+		if(AlColliderBox.bounds.Intersects(coll.gameObject.GetComponent<Collider2D>().bounds))
+		{
 			onGround = true;
-			
-			if(climbBottom)
-			{	
-				isClimb = false;
-			}
 		}
 
-		hitLeftRight = false;
+		if(AlColliderBottom.bounds.Intersects(coll.gameObject.GetComponent<Collider2D>().bounds))
+		{
+			onGround = true;
+		}
 	}
 
 	void OnTriggerStay2D(Collider2D coll)
 	{
-		if(coll.gameObject.renderer != null)
+		if (coll.gameObject.renderer != null) 
 		{
-			if(AlColliderRight.bounds.Intersects(coll.gameObject.renderer.bounds))
-				if(coll.gameObject.tag == "Ground")
-						gameObject.transform.position = new Vector3(gameObject.transform.position.x - moveSpeed - 0.01f, gameObject.transform.position .y, gameObject.transform.position .z);
-			if(AlColliderLeft.bounds.Intersects(coll.gameObject.renderer.bounds))
-				if(coll.gameObject.tag == "Ground")
-					gameObject.transform.position = new Vector3(gameObject.transform.position.x + moveSpeed + 0.01f, gameObject.transform.position .y, gameObject.transform.position .z);
-		
-			if(AlColliderTop.bounds.Intersects(coll.gameObject.renderer.bounds))
-			{
-			}
+			if(coll.gameObject.tag == "Ground")
+				groundCollision (coll);
 		}
 
 		if(coll.gameObject.tag =="LadderTop")
@@ -264,7 +335,7 @@ public class AlScript : MonoBehaviour {
 				startClimbPosition = coll.gameObject.transform.position;
 				gameObject.transform.position = coll.gameObject.transform.position;
 			}
-
+			
 			if(Input.GetKey(KeyCode.UpArrow))
 			{	
 				startClimbPosition = coll.gameObject.transform.position;
@@ -274,7 +345,7 @@ public class AlScript : MonoBehaviour {
 				isClimb = false;
 			}
 		}
-
+		
 		if(coll.gameObject.tag =="LadderBottom")
 		{	if(Input.GetKey(KeyCode.UpArrow) && !isClimb)
 			{	
@@ -284,11 +355,52 @@ public class AlScript : MonoBehaviour {
 				climbBottom = false;
 			}
 		}
-	}
 
+		if(coll.gameObject.tag == "Elements")
+		{
+			selectElements(coll.gameObject);
+		}
+	}
+	
 	void OnTriggerExit2D(Collider2D coll)
 	{
-		if (coll.gameObject.tag == "Ground")
-			onGround = false;
+		if (coll.gameObject.renderer != null) 
+		{
+			if(coll.gameObject.tag == "Ground")
+			{		
+				if (!AlColliderBottom.bounds.Intersects (coll.gameObject.renderer.bounds)) 
+					onGround = false;
+				else 
+					onGround = true;
+			}	
+		}
+	}
+
+	bool itemWait = false;
+
+	void selectElements(GameObject go)
+	{
+		if(Input.GetKeyUp(KeyList.keyInteract))
+			itemWait = false;
+
+		if(Input.GetKeyDown(KeyList.keyInteract))
+		{
+			go.SetActive(false);
+
+			switch(go.name)
+			{
+			case "carbon_small":
+				AlInventory.inventoryData[0,0]._amount += 1;
+				break;
+			case "hydrogen_small":
+				AlInventory.inventoryData[2,0]._amount += 1;
+				break;
+			case "oxygen_small":
+				AlInventory.inventoryData[1,0]._amount += 1;
+				break;
+			case "":
+				break;
+			}
+		}
 	}
 }

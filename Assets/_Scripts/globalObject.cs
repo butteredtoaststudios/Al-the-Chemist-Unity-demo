@@ -8,10 +8,13 @@ public class globalObject : MonoBehaviour
 	public int playerHealth = 5;
 	public bool playerFaceRight = true;
 
+	public DialogScript diag;
+
 	// Use this for initialization
 	void Start () 
 	{
 		DontDestroyOnLoad(transform.gameObject);
+		diag = gameObject.GetComponent<DialogScript> ();
 	}
 	
 	// Update is called once per frame

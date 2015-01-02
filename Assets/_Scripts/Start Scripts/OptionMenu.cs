@@ -16,9 +16,13 @@ public class OptionMenu : MonoBehaviour {
 
 	public bool showMenu = false;
 	private bool menuDown = false;
+	private bool toUpdateKeys = false;
+	private bool toAssignNewKey = false;
 
 	float bgVolume = 0.5f;
 	float fxVolume = 0.5f;
+
+	KeyCode selectedKey;
 
 	// Use this for initialization
 	void Start () {
@@ -50,6 +54,8 @@ public class OptionMenu : MonoBehaviour {
 			}
 			userChoice = 0;
 		}
+
+		updateKeys ();
 	}
 
 	public void executeFunction()
@@ -73,6 +79,20 @@ public class OptionMenu : MonoBehaviour {
 		case 4:
 			fxVolume = soundVolume(fxVolume, 0.1f);
 			break;
+		
+		case 7:
+		case 8:
+		case 9:
+		case 10:
+		case 11:
+		case 12:
+		case 13:
+		case 14:
+		case 15:
+		case 16:
+		case 17:
+			toUpdateKeys = true;
+			break;
 		}
 	}
 
@@ -87,8 +107,51 @@ public class OptionMenu : MonoBehaviour {
 		return curVolume;
 	}
 
+	private void updateKeys()
+	{
+		if (toUpdateKeys) {
+			Debug.Log ("update key");
+
+			if(Input.GetKeyDown(KeyCode.Return))
+			{
+				toAssignNewKey = true;
+				toUpdateKeys = false;
+			}
+		}
+
+		if(toAssignNewKey)
+		{
+			Debug.Log("user start assigning new key");
+			
+			KeyList.keyUp = assignNewKey(7, KeyList.keyUp, selectedKey);
+			KeyList.keyDown = assignNewKey(8, KeyList.keyDown, selectedKey);
+			KeyList.keyLeft = assignNewKey(9, KeyList.keyLeft, selectedKey);
+			KeyList.keyRight = assignNewKey(10, KeyList.keyRight, selectedKey);
+			KeyList.keyJump = assignNewKey(11, KeyList.keyJump, selectedKey);
+			KeyList.keyInteract = assignNewKey(12, KeyList.keyInteract, selectedKey);
+			KeyList.keyEquipped = assignNewKey(13, KeyList.keyEquipped, selectedKey);
+			KeyList.keyInventory = assignNewKey(14, KeyList.keyInventory, selectedKey);
+			KeyList.keyMap = assignNewKey(15, KeyList.keyMap, selectedKey);
+			KeyList.keyConfirm = assignNewKey(16, KeyList.keyConfirm, selectedKey);
+			KeyList.keyMenu = assignNewKey(17, KeyList.keyMenu, selectedKey);
+
+			toAssignNewKey = false;
+		}
+	}
+
+	private KeyCode assignNewKey(int selectedKeyInt, KeyCode selectedKeyCode, KeyCode newKey)
+	{
+		if (Input.anyKeyDown) {
+			if (userChoice == selectedKeyInt)
+					return newKey;
+		}
+		return selectedKeyCode;
+	}
+
 	public void OnGUI()
 	{
+		selectedKey = Event.current.keyCode;
+
 		GUI.skin = optionGUI;
 		GUI.Box(new Rect(Screen.width/2 - 444/2, positionY, 444, 480), "", "optionPanel");
 
@@ -124,29 +187,29 @@ public class OptionMenu : MonoBehaviour {
 	public void key()
 	{
 		//up
-		buttonStyle(7, new Rect(209, positionY + 317, 47, 25), "keyPanelOn", "keyPanelOff", "A");
+		buttonStyle(7, new Rect(209, positionY + 317, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyUp.ToString());
 		//down
-		buttonStyle(8, new Rect(209, positionY + 342, 47, 25), "keyPanelOn", "keyPanelOff", "A");
+		buttonStyle(8, new Rect(209, positionY + 342, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyDown.ToString());
 		//left
-		buttonStyle(9, new Rect(209, positionY + 367, 47, 25), "keyPanelOn", "keyPanelOff", "A");
+		buttonStyle(9, new Rect(209, positionY + 367, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyLeft.ToString());
 		//right
-		buttonStyle(10, new Rect(209, positionY + 392, 47, 25), "keyPanelOn", "keyPanelOff", "A");
+		buttonStyle(10, new Rect(209, positionY + 392, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyRight.ToString());
 
 		//jump
-		buttonStyle(11, new Rect(275, positionY + 330, 47, 25), "keyPanelOn", "keyPanelOff", "A");
+		buttonStyle(11, new Rect(275, positionY + 330, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyJump.ToString());
 		//interact
-		buttonStyle(12, new Rect(369, positionY + 330, 47, 25), "keyPanelOn", "keyPanelOff", "A");
+		buttonStyle(12, new Rect(369, positionY + 330, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyInteract.ToString());
 		//equipped
-		buttonStyle(13, new Rect(472, positionY + 330, 47, 25), "keyPanelOn", "keyPanelOff", "A");
+		buttonStyle(13, new Rect(472, positionY + 330, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyEquipped.ToString());
 		//inventory
-		buttonStyle(14, new Rect(273, positionY + 391, 47, 25), "keyPanelOn", "keyPanelOff", "A");
+		buttonStyle(14, new Rect(273, positionY + 391, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyInventory.ToString());
 
 		//map
-		buttonStyle(15, new Rect(341, positionY + 391, 47, 25), "keyPanelOn", "keyPanelOff");
+		buttonStyle(15, new Rect(341, positionY + 391, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyMap.ToString());
 		//confirm
-		buttonStyle(16, new Rect(409, positionY + 391, 47, 25), "keyPanelOn", "keyPanelOff");
+		buttonStyle(16, new Rect(409, positionY + 391, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyConfirm.ToString());
 		//menu
-		buttonStyle(17, new Rect(477, positionY + 391, 47, 25), "keyPanelOn", "keyPanelOff");
+		buttonStyle(17, new Rect(477, positionY + 391, 47, 25), "keyPanelOn", "keyPanelOff", KeyList.keyMenu.ToString());
 	}
 
 	private void buttonStyle(int choice, Rect rect, string onState, string offState, string value = "")

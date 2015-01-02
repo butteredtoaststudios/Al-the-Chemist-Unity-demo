@@ -14,7 +14,8 @@ public class ChangeRoomScript : MonoBehaviour {
 	void Start () {
 		currentRoom = Application.loadedLevelName;
 
-		go = GameObject.Find("GlobalObject").GetComponent<globalObject>();
+		if(GameObject.Find("GlobalObject") != null)
+			go = GameObject.Find("GlobalObject").GetComponent<globalObject>();
 	}
 	
 	// Update is called once per frame
@@ -39,10 +40,14 @@ public class ChangeRoomScript : MonoBehaviour {
 	{
 		switch(cRoom)
 		{
+		case "00_Tutorial2":
+			go.playerFaceRight = true;
+			return new Vector3(-6.9f + shift.x, 4.475594f + shift.y, 0f);
+
 		case "01_Lab":
 			go.playerFaceRight = true;
 			return new Vector3(-7.2f,  1.6f + shift.y, 0f);
-			break;
+//			break;
 			
 		case "02_LabCommon":
 			if(currentRoom == "01_Lab")
@@ -65,7 +70,7 @@ public class ChangeRoomScript : MonoBehaviour {
 		case "03_LabStorage":
 				go.playerFaceRight = false;
 				return new Vector3(4.638611f + shift.x, 1.6f + shift.y, 0f);
-			break;
+//			break;
 			
 		case "04_Cave01":
 			if(currentRoom == "02_LabCommon")
@@ -101,9 +106,15 @@ public class ChangeRoomScript : MonoBehaviour {
 		case "05_Ruins":
 			go.playerFaceRight = true;
 			return new Vector3(-6.08f + shift.x, 0.6399993f + shift.y, 0f);
-			break;
+//			break;
 		}
-		
+
+/*		case "06_Cave03":
+		{
+			go.playerFaceRight = true;
+			return new Vector3(-6.08f + shift.x, 0.6399993f + shift.y, 0f);
+		}
+*/		
 		return Vector3.zero;
 	}
 }

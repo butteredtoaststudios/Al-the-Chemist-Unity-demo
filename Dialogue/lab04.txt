@@ -1,3 +1,2 @@
 01| "Awesome!  It's complete! Now for the fun part!"| BEGIN
-01| "Alright, let's try something basic."| NEXT
-01| | END
+01| "Alright, let's try something basic."| END
