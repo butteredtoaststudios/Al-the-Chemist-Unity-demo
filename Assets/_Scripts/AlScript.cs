@@ -7,6 +7,7 @@ public class AlScript : MonoBehaviour {
 	public GUISkin alGUI;
 	public bool freezeAl = false;
 	public float moveSpeed = 0.04f;
+	private float jumpSpeed = 0.06f;
 	public float imageSpeed = 0.2f;
 	public float climbSpeed = 0.01f;
 	public float maxJumpHeight = 1.25f;
@@ -100,7 +101,7 @@ public class AlScript : MonoBehaviour {
 			gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 180, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
 	}
 
-	//y = v0 * t - 0.5f g * (t * t)
+	/*
 	float vy_0;
 	float timeTotal = 0;
 
@@ -118,19 +119,20 @@ public class AlScript : MonoBehaviour {
 		}
 		if(Input.GetKeyUp(KeyList.keyJump) && !onGround)
 		{
-			isJumping = false;
 			timeTotal = 0;
 			vy_0 = 0;
 			gravity = 16.4f;
+			isJumping = false;
 		}
 
-		if(Input.GetKeyDown(KeyList.keyJump) && isJumping)
+		if(Input.GetKey(KeyList.keyJump) && isJumping)
 		{
-			timeTotal = 0;
+			//timeTotal = 0;
 			gravity = 16.4f;
 			vy_0 = Mathf.Sqrt(height * 2 * gravity);
 		}
-		else if(onGround)
+
+		if(onGround && !isJumping)
 		{
 			timeTotal = 0;
 			gravity = 0;
@@ -142,19 +144,14 @@ public class AlScript : MonoBehaviour {
 	
 		gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + y, gameObject.transform.position .z);
 	}
-
-	/*
-	 * 		timeTotal += timeSpeed;
-			vy_0 = Mathf.Sqrt(height * 2 * gravity);
-			y = (vy_0 * timeTotal) - 0.5f*(gravity * (timeTotal* timeTotal));
-
-*/
-
-	private void onJumpKey(int ignore)
+	*/
+	
+	private void onJumpKey()
 	{
 		if(Input.GetKeyDown(KeyCode.Space) && !isJumping && onGround)
 		{
 			isJumping = true;
+			AlSprites.playAnimation("jump");
 		}
 		if(Input.GetKeyUp(KeyCode.Space))
 		{
@@ -169,18 +166,15 @@ public class AlScript : MonoBehaviour {
 				onGround = false;
 			}
 
-			//float y = (4 * Time.deltaTime) - (0.5f * 9.8f * (Time.deltaTime * Time.deltaTime));
-			//float x = Time.deltaTime;
-
 			if(gameObject.transform.position.y < (startJumpPosition.y + maxJumpHeight))
-				gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + moveSpeed, gameObject.transform.position .z);
+				gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + jumpSpeed, gameObject.transform.position .z);
 			else 
 				isJumping = false;
 		}
 
 		else if(!onGround)
 		{
-			gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - moveSpeed, gameObject.transform.position .z);
+			gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - jumpSpeed, gameObject.transform.position .z);
 		}
 	}
 
@@ -274,6 +268,44 @@ public class AlScript : MonoBehaviour {
 			onGround = true;
 	}
 
+	/*
+	void OnColliderEnter2D(Collider2D coll)
+	{
+		Debug.Log("collider");
+		if(coll.gameObject.tag == "Ground")
+			onGround = true;
+	}
+
+	void OnTriggerEnter2D(Collider2D coll)
+	{
+		Debug.Log("trigger");
+		if(coll.gameObject.tag == "Ground")
+		{	
+			timeTotal = 0;
+			gravity = 0;
+			vy_0 = 0;
+			onGround = true;
+		}
+	}
+
+	void OnTriggerStay2D(Collider2D coll)
+	{
+		if(coll.gameObject.tag == "Ground")
+		{	
+			onGround = true;
+		}
+	}
+
+
+	void OnTriggerExit2D(Collider2D coll)
+	{
+		if(coll.gameObject.tag == "Ground")
+		{	
+			onGround = false;
+		}
+	}*/
+
+
 	void OnTriggerEnter2D(Collider2D coll)
 	{
 		if (coll.gameObject.renderer != null) 
@@ -309,13 +341,16 @@ public class AlScript : MonoBehaviour {
 
 		if(AlColliderBox.bounds.Intersects(coll.gameObject.GetComponent<Collider2D>().bounds))
 		{
+			gameObject.transform.position= new Vector3(gameObject.transform.position.x, coll.gameObject.transform.position.y + 0.64f, gameObject.transform.position.z);
 			onGround = true;
 		}
 
-		if(AlColliderBottom.bounds.Intersects(coll.gameObject.GetComponent<Collider2D>().bounds))
+		else if(AlColliderBottom.bounds.Intersects(coll.gameObject.GetComponent<Collider2D>().bounds))
 		{
+			gameObject.transform.position= new Vector3(gameObject.transform.position.x, coll.gameObject.transform.position.y + 0.64f, gameObject.transform.position.z);
 			onGround = true;
 		}
+
 	}
 
 	void OnTriggerStay2D(Collider2D coll)

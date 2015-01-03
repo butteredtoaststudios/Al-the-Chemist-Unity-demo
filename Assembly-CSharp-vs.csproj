@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Resources\Assets\Tutorial\InstructionObject.cs" />
+     <Compile Include="Assets\Resources\Assets\Tutorial\TutorialCamera.cs" />
      <Compile Include="Assets\_Scripts\AlScript.cs" />
      <Compile Include="Assets\_Scripts\AlSpriteList.cs" />
      <Compile Include="Assets\_Scripts\Animate.cs" />

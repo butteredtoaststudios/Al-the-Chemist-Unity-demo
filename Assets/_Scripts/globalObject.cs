@@ -15,6 +15,9 @@ public class globalObject : MonoBehaviour
 	{
 		DontDestroyOnLoad(transform.gameObject);
 		diag = gameObject.GetComponent<DialogScript> ();
+
+		if(player == null)
+			player = Instantiate(Resources.Load("_Prefab/Al"), playerLocation, Quaternion.identity) as GameObject;
 	}
 	
 	// Update is called once per frame

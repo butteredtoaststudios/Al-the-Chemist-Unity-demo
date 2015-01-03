@@ -30,8 +30,10 @@ public class Tutorial : MonoBehaviour {
 	{
 		Camera.main.GetComponent<SmoothFollow> ().toUpdateCamera = false;
 
-		Al = GameObject.Find ("Al");
 		Global = GameObject.Find ("GlobalObject");
+
+		Global.GetComponent<ElementInterfaceScript>().enabled = false;
+		Global.GetComponent<globalObject>().player.GetComponent<HealthScript>().enabled = false;
 
 		combinerRect = new Rect[]{new Rect(new Rect(Screen.width/2 - combinerSprite[0].texture.width/2, 100, combinerSprite[0].texture.width, combinerSprite[0].texture.height)),
 			new Rect(new Rect(Screen.width/4 - combinerSprite[1].texture.width/2, 300, combinerSprite[1].texture.width, combinerSprite[1].texture.height)),
@@ -52,8 +54,9 @@ public class Tutorial : MonoBehaviour {
 			if(scaleLastImage)
 				scaleLastImage = startImageScale(0.06f);
 
-			if(playScript.textInt == -1)// && !scaleLastImage)
-			{	spriteRender.enabled = false;
+			if(playScript.textInt == -1 && !scaleLastImage)
+			{	
+				spriteRender.enabled = false;
 				scriptActive[0] = false;
 				Camera.main.GetComponent<SmoothFollow> ().toUpdateCamera = true;
 
