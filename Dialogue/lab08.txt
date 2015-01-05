@@ -1,2 +1,0 @@
-01| "Finally, some peace and quiet."| BEGIN
-01| | END

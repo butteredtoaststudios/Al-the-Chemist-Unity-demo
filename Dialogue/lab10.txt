@@ -1,2 +1,0 @@
-01| “All the remaining parts to the Combiner are here in the lab. First I need to pick them up| BEGIN
-01| and assemble them."| END

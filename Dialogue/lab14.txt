@@ -1,2 +1,0 @@
-01| “Oh!  I know what we should do next, let’s put-!”| BEGIN
-01| | END

@@ -438,4 +438,10 @@ public class AlScript : MonoBehaviour {
 			}
 		}
 	}
+
+	public bool _groundState
+	{
+		get{return onGround;}
+		set{onGround = value;}
+	}
 }
