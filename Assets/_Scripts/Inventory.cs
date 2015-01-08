@@ -64,11 +64,11 @@ public class Inventory : InventoryDatabase {
 	{
 		if( canHasMenu == true )
 		{
-			GUI.Box(new Rect(startX, startY, inventoryBg.width, inventoryBg.height), inventoryBg, "");
-			GUI.Box(new Rect(itemStartX, itemStartY, itemsBg.width, itemsBg.height), itemsBg, "");
-			GUI.Box(new Rect(startX+10, startY+299, itemsInfo.width, itemsInfo.height), itemsInfo, "");
-			GUI.Box(new Rect(startX+367, startY+68, combinerBg.width, combinerBg.height), combinerBg, "");
-			GUI.Box(new Rect(startX+400, startY+100, combiner.width, combiner.height), combiner, "");
+			GUI.Box(new Rect(startX, startY, inventoryBg.width, inventoryBg.height), inventoryBg);
+			GUI.Box(new Rect(itemStartX, itemStartY, itemsBg.width, itemsBg.height), itemsBg);
+			GUI.Box(new Rect(startX+10, startY+299, itemsInfo.width, itemsInfo.height), itemsInfo);
+			GUI.Box(new Rect(startX+367, startY+68, combinerBg.width, combinerBg.height), combinerBg);
+			GUI.Box(new Rect(startX+400, startY+100, combiner.width, combiner.height), combiner);
 			
 			
 			itemize();
@@ -78,8 +78,8 @@ public class Inventory : InventoryDatabase {
 			if( createdNewItem == true )
 			{
 				//Debug.Log( newItemMade.name );
-				GUI.Box(new Rect(newItemX, newItemY, newItemDisplay.width, newItemDisplay.height), newItemDisplay, "");
-				GUI.Box(new Rect(newItemX+115, newItemY+170, newItemSpr.width, newItemSpr.height), newItemSpr, "");
+				GUI.Box(new Rect(newItemX, newItemY, newItemDisplay.width, newItemDisplay.height), newItemDisplay);
+				GUI.Box(new Rect(newItemX+115, newItemY+170, newItemSpr.width, newItemSpr.height), newItemSpr);
 			}
 		}
 	}

@@ -5,6 +5,7 @@ public class Map : MapDatabase {
 
 	public Texture2D mapBg;
 	public Texture2D locSelected;
+	public Texture2D linePixel;
 
 	public bool canHasMap;
 
@@ -19,6 +20,8 @@ public class Map : MapDatabase {
 		initializeMapDBInfo();
 
 		locSelected = Resources.Load("Assets/Map/al_normal2") as Texture2D;
+
+		linePixel = Resources.Load("Assets/Map/square_black") as Texture2D;
 
 		canHasMap = false;
 		mapStartX = startX + 15;
@@ -47,11 +50,18 @@ public class Map : MapDatabase {
 			GUI.Box(new Rect(startX, startY, mapBg.width, mapBg.height), mapBg, "");
 
 			plotMap();
+
+			//GUI.Box(new Rect(20, 40, 100, 100), "");
+
+			//GUI.Box(new Rect(startX, startY, mapBg.width, mapBg.height), mapData[0,2].locationSprite, "");
 		}
 	}
 
 	public void plotMap()
 	{
+		//Debug.Log("HELLO!");
+
+
 		for(int i=0; i<mapData.GetLength(0); i++)
 		{
 			for(int j=0; j<mapData.GetLength(1); j++)
@@ -61,6 +71,80 @@ public class Map : MapDatabase {
 
 				if( mapData[i,j].hasBeenFound == true )
 				{
+					//Debug.Log("WHAT IS THIS " + (mapData[i,j].connectedTo));
+
+
+					for( int k=0; k < (mapData[i,j].connectedTo).Length; k++ )
+					{
+						//Debug.Log( (mapData[i,j].connectedTo[k]) );
+
+
+						if( (mapData[i,j].connectedTo[k]).hasBeenFound == true )
+						{
+							if( (i==4 && j==2) || (i==7 && j==4) )
+							{
+								if( j < mapData[i,j].connectedTo[k].yLocation )
+								{
+									GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, Mathf.Abs ((i*60)-(mapData[i,j].connectedTo[k].xLocation*60)), 10), "");						
+									GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(j*55)+35, 10, Mathf.Abs ((j*55)-(mapData[i,j].connectedTo[k].yLocation*55))), "");
+								}
+								else{
+									GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, Mathf.Abs ((i*60)-(mapData[i,j].connectedTo[k].xLocation*60)), 10), "");						
+									GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, 10, Mathf.Abs ((j*55)-(mapData[i,j].connectedTo[k].yLocation*55))), "");
+								}
+							}
+							else if( (i==3 && j==1) )
+							{
+								if( j > mapData[i,j].connectedTo[k].yLocation )
+								{
+									GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, Mathf.Abs ((i*60)-(mapData[i,j].connectedTo[k].xLocation*60)), 10), "");						
+									GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, 10, Mathf.Abs ((j*55)-(mapData[i,j].connectedTo[k].yLocation*55))), "");
+								}
+							}
+							else if( (i==6 && j==5) || (i==7 && j==2) )
+							{
+								if( mapData[i,j].connectedTo[k].xLocation==7 && mapData[i,j].connectedTo[k].yLocation==2)
+								{
+									GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(j*55)+35, Mathf.Abs ((i*60)-(mapData[i,j].connectedTo[k].xLocation*60))/2, 10), "");						
+									GUI.Box(new Rect( mapStartX+(i*60)+60, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, 10, Mathf.Abs ((j*55)-(mapData[i,j].connectedTo[k].yLocation*55))), "");
+									GUI.Box(new Rect( mapStartX+(i*60)+60, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, Mathf.Abs ((i*60)-(mapData[i,j].connectedTo[k].xLocation*60))/2, 10), "");
+								}
+								else if( j > mapData[i,j].connectedTo[k].yLocation )
+								{
+									GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(j*55)+35, Mathf.Abs ((i*60)-(mapData[i,j].connectedTo[k].xLocation*60)), 10), "");						
+									GUI.Box(new Rect( mapStartX+(mapData[i,j].connectedTo[k].xLocation*60)+30, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, 10, Mathf.Abs ((j*55)-(mapData[i,j].connectedTo[k].yLocation*55))), "");
+								}
+							}
+							else if(i == mapData[i,j].connectedTo[k].xLocation && j < mapData[i,j].connectedTo[k].yLocation )
+							{
+								GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(j*55)+35, 10, Mathf.Abs ((j*55)-(mapData[i,j].connectedTo[k].yLocation*55))), "");
+							}
+							else if(i == mapData[i,j].connectedTo[k].xLocation && j > mapData[i,j].connectedTo[k].yLocation )
+							{
+								GUI.Box(new Rect( mapStartX+(mapData[i,j].connectedTo[k].xLocation*60)+30, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, 10, Mathf.Abs ((j*55)-(mapData[i,j].connectedTo[k].yLocation*55))), "");
+							}
+
+							else
+							{
+								GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(j*55)+35, Mathf.Abs ((i*60)-(mapData[i,j].connectedTo[k].xLocation*60)), 10), "");
+							}
+
+							if(i < mapData[i,j].connectedTo[k].xLocation)
+							{
+								if( j < mapData[i,j].connectedTo[k].yLocation )
+								{
+									GUI.Box(new Rect( mapStartX+(i*60)+30, mapStartY+(j*55)+35, Mathf.Abs ((i*60)-(mapData[i,j].connectedTo[k].xLocation*60)), 10), "");
+									
+									GUI.Box(new Rect( mapStartX+(mapData[i,j].connectedTo[k].xLocation*60)+30, mapStartY+(j*55)+35, 10, Mathf.Abs ((j*55)-(mapData[i,j].connectedTo[k].yLocation*55))), "");
+									
+									//GUI.Box(new Rect( mapStartX+(mapData[i,j].connectedTo[k].xLocation*60)+30, mapStartY+(mapData[i,j].connectedTo[k].yLocation*55)+35, 10, Mathf.Abs ((j*55)-(mapData[i,j].connectedTo[k].yLocation*55))), "");
+								}
+							}
+						}
+
+					}
+
+
 					if( mapData[i,j].isSelected == true )
 					{
 						GUI.Box(new Rect(mapStartX+(i*60)+8, mapStartY+(j*55)+8, locSelected.width, locSelected.height), locSelected, "");

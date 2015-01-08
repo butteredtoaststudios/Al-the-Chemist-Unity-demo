@@ -10,6 +10,10 @@ public class MapLocation : MonoBehaviour {
 	public bool hasBeenFound = true;
 	public bool isCurrentLocation = false;
 	public bool isSelected = false;
+	public MapLocation[] connectedTo;
+
+	public int xLocation=0;
+	public int yLocation=0;
 
 	// Use this for initialization
 	void Start () {
