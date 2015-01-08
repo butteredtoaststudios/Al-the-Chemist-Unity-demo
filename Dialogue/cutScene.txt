@@ -1,0 +1,14 @@
+05| "In a world not that different from our own, humanity has consumed itself with technological corruption."| BEGIN
+05| "The old gods have no control here; the new techno-gods are born from the hiss of industry and the clanking of the ambitious machine that is the human mind."| NEXT
+05| "Numbering in legions, the tendrils of their infamous genius reach into every aspect of life. No one is safe from their experiments to push the frontiers of science and technology."| NEXT
+05| "But soon, even they - the conjurers of techno-magic - will not be safe from this one man"| NEXT
+05| "Narrator:  This man, who will emerge as the one who beat them all."| NEXT
+05| "Narrator:  This man, who emerges once every millenium. This man, who..."| NEXT
+01| "Al: What are you doing?"| NEXT
+05| "Narrator:  I'm, uh, just telling them about the, um, rise of mad scientists..."| NEXT
+03| "Al: Mad scientists?"| NEXT
+05| "Narrator:  Yeah, um, you know, the ones you see in movies and on TV. In other words, YOU."| NEXT
+03| "Oh, for the love of... okay look, my name is Al. I'm a chemist on the verge of a major breakthrough."| END
+
+
+

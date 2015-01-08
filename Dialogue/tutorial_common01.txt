@@ -1,0 +1,3 @@
+01| "Oh man, an earthquake? Great. I need to get out of here!"| BEGIN
+01| "Oh no, the earthquake caused a fire!"|
+01| "I can't get out of here until I put the fires out! The fire extinguisher is also destroyed!  I'm going to need some water for this."| END

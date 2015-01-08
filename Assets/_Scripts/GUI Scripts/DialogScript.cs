@@ -3,15 +3,16 @@ using System.Collections;
 
 public class DialogScript : MonoBehaviour {
 
+	public GUISkin skin;
 	public Sprite[] dialogSprites;
-
+	public Sprite[] faceSprites;
 	public Sprite[] pointer;
 
 	private float time;
 	private int imageIndex = 0;
 	public float imageSpeed = 0.07f;
 
-	private bool showDiag = false;
+	public bool showDiag = false;
 	private string diagText = "TEST TEST TEST TEST. ";
 
 	// Use this for initialization
@@ -40,6 +41,7 @@ public class DialogScript : MonoBehaviour {
 
 	void OnGUI()
 	{
+		GUI.skin = skin;
 		if(_showDiag)
 			GUI.Window(5, new Rect(0, Screen.height - dialogSprites[0].texture.height, dialogSprites[0].texture.width, dialogSprites[0].texture.height), diagWindow, "");
 	}
@@ -51,10 +53,15 @@ public class DialogScript : MonoBehaviour {
 		GUI.Box(new Rect(22, 21, 64, 64), dialogSprites[1].texture, "");
 		GUI.Box(new Rect(16, 15, 76, 76), dialogSprites[2].texture, "");
 		
-		GUI.Box(new Rect(122, 23, 76, 76), diagText, "");
+		GUI.Box(new Rect(122, 23, 516, 76), diagText, "diagText");
 		
 		
 		GUI.Box(new Rect(Screen.width - 31, 60, 16, 32), pointer[(imageIndex + 1) % pointer.Length].texture, "");
+	}
+
+	public void updatePortrait(int spriteInt)
+	{
+		dialogSprites[1] = faceSprites[spriteInt - 1];
 	}
 
 	void updateImage()

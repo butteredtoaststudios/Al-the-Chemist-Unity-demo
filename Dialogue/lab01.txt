@@ -1,3 +1,3 @@
 05| "Narrator:  A rice cooker?"| BEGIN
-01| "You're a riot you know that?  Now, if you'll please excuse me, I have #work to do."| NEXT
-01| ""| END
+01| "You're a riot you know that?  Now, if you'll please excuse me, I have work to do."| NEXT
+01| "Okay, I'm going to need some parts from the counter over there." | END

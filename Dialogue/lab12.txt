@@ -1,2 +1,0 @@
-01| “Ok let’s test this.”| BEGIN
-01| | END

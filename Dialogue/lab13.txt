@@ -1,2 +1,0 @@
-01| “Amazing! my theory is correct.”| BEGIN
-01| | END

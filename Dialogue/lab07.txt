@@ -1,2 +1,0 @@
-01| "You’re a riot you know that?  Now, if you’ll please excuse me, I have work to do."| BEGIN
-01| | END

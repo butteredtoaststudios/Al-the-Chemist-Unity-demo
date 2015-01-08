@@ -1,1 +1,0 @@
-onfire3 and onfire7 need to be lifted by 1 or 2 pixels (whichever looks better). See onfire-anim.gif for example.

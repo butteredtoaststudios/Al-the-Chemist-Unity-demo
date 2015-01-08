@@ -1,2 +1,1 @@
-01| "Let's go install this stuff."| BEGIN
-01| ""| END
+01| "Let's go install this stuff."| END
