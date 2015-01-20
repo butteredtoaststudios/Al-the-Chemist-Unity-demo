@@ -4,7 +4,7 @@ using System.Collections;
 public class MapLocation : MonoBehaviour {
 	
 	public string name = "";
-	public Texture2D locationSprite;
+	public Texture2D[] locationSprite = new Texture2D[2];
 	public int locationNumber = 0;
 	public int roomType = 0;
 	public bool hasBeenFound = true;
