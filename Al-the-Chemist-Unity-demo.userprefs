@@ -1,14 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Scripts\Start Scripts\StartMenu.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\_Scripts\GameOverScript.cs">
     <Files>
-      <File FileName="Assets\_Scripts\Start Scripts\StartMenu.cs" Line="53" Column="17" />
-      <File FileName="Assets\_Scripts\MapDatabase.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Scripts\InventoryDatabase.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Scripts\Inventory.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Scripts\InventoryItem.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Scripts\MapLocation.cs" Line="1" Column="1" />
-      <File FileName="Assets\_Scripts\Map.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\AlScript.cs" Line="190" Column="5" />
+      <File FileName="Assets\_Scripts\Start Scripts\StartMenu.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\Tutorial.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\SmoothFollow.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\AlSpriteList.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\globalObject.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\GUI Scripts\ElementInterfaceScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\_Scripts\GameOverScript.cs" Line="16" Column="41" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

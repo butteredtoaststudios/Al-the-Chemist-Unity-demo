@@ -3,7 +3,7 @@ using System.Collections;
 
 public class SmoothFollow : MonoBehaviour {
 	
-	Transform target;
+	public Transform target;
 	float smoothTime = 0.0f;
 	Transform thisTransform;
 	private Vector2 velocity;
@@ -15,6 +15,7 @@ public class SmoothFollow : MonoBehaviour {
 	private float boundY;
 
 	public bool toUpdateCamera = true; 
+	public GameObject global;
 	
 	void Start()
 	{
@@ -47,7 +48,6 @@ public class SmoothFollow : MonoBehaviour {
 		   Mathf.SmoothDamp( thisTransform.position.x, newPosition.x, ref velocity.x, smoothTime)  < boundX)
 		{
 			float newX = Mathf.SmoothDamp( thisTransform.position.x, newPosition.x, ref velocity.x, smoothTime);
-			
 			thisTransform.position = new Vector3(newX, thisTransform.position.y, thisTransform.position.z);
 		}
 		else if(Mathf.SmoothDamp( thisTransform.position.x, newPosition.x, ref velocity.x, smoothTime)  <= -boundX)

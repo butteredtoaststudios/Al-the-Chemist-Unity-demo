@@ -18,6 +18,8 @@ public class globalObject : MonoBehaviour
 
 		if(player == null)
 			player = Instantiate(Resources.Load("_Prefab/Al"), playerLocation, Quaternion.identity) as GameObject;
+
+		Camera.main.GetComponent<SmoothFollow>().target = player.transform;
 	}
 	
 	// Update is called once per frame

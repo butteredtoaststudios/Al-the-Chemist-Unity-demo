@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class JournalEntry : MonoBehaviour {
+public class JournalEntry {
 
 	public string pageEntry = "";
 	public bool hasBeenMade = false;

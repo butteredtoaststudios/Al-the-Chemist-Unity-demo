@@ -8,24 +8,20 @@ public class AlScript : MonoBehaviour {
 	public bool freezeAl = false;
 	public float moveSpeed = 0.04f;
 	private float jumpSpeed = 0.06f;
-	public float imageSpeed = 0.2f;
 	public float climbSpeed = 0.01f;
 	public float maxJumpHeight = 1.25f;
 
-	public Sprite AlIdle;
-	public AlSpriteList AlSprites;
-	public SpriteRenderer spriteRender;
+	private Animator animate;
 
-	private float time;
-	private int imageIndex = 0;
 	private bool isJumping = false;
 	private bool onGround = false;
+	private bool onLadder = false;
 	private Vector3 startJumpPosition = Vector3.zero;
 
 	private bool isClimb = false;
-	private bool climbStart = false;
-	private bool climbBottom = false;
-	private bool climbReverse = false;
+	private bool climbKeys = false;
+	private bool ladderBottom = false;
+
 	private Vector3 startClimbPosition = Vector3.zero;
 
 	public BoxCollider2D AlColliderBox;
@@ -37,15 +33,12 @@ public class AlScript : MonoBehaviour {
 	globalObject go;
 	Inventory AlInventory;
 
-	private bool updateImageReverse = false;
-
 	// Use this for initialization
-	void Start () {
-
+	void Start () 
+	{
 		go = GameObject.Find("GlobalObject").GetComponent<globalObject>();
-		AlSprites = gameObject.GetComponent<AlSpriteList>();
-
 		AlInventory = go.GetComponent<Inventory>();
+		animate = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -53,23 +46,22 @@ public class AlScript : MonoBehaviour {
 	{
 		if(!freezeAl)
 		{
-			if(!isClimb && !climbReverse)
+			if(!isClimb)
 			{
 				onWalkKey();
 				onJumpKey();
+
+				animate.SetBool("ground", onGround);
 			}
-
-			if(climbReverse)
-				climbRevFunc();
-
-			if(isClimb && !climbStart)
+			else
 			{
-				climbStartClimbFunc();
+				animate.SetBool("walk", false);
+				animate.SetBool("ground", true);
 			}
-			if(isClimb && (climbStart || climbBottom))
+
+			if(climbKeys)
 				onClimbKey();
 		}
-		updateImage(updateImageReverse);
 	}
 
 	private void onWalkKey()
@@ -80,7 +72,7 @@ public class AlScript : MonoBehaviour {
 				gameObject.transform.position = new Vector3(gameObject.transform.position.x - moveSpeed, gameObject.transform.position .y, gameObject.transform.position .z);
 			go.playerFaceRight = false;
 
-			AlSprites.playAnimation("walk");
+			animate.SetBool("walk", true);
 		}
 		else if(Input.GetKey(KeyList.keyLeft))
 		{
@@ -88,76 +80,25 @@ public class AlScript : MonoBehaviour {
 				gameObject.transform.position = new Vector3(gameObject.transform.position.x + moveSpeed, gameObject.transform.position .y, gameObject.transform.position .z);
 			go.playerFaceRight = true;
 
-			AlSprites.playAnimation("walk");
+			animate.SetBool("walk", true);
 		}
 		else
-		{
-			AlSprites.playAnimation("idle");
-		}
+			animate.SetBool("walk", false);
 
 		if(go.playerFaceRight)
 			gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 0, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
 		else
 			gameObject.transform.rotation = new  Quaternion(gameObject.transform.rotation.x, 180, gameObject.transform.rotation.z, gameObject.transform.rotation.w);
 	}
-
-	/*
-	float vy_0;
-	float timeTotal = 0;
-
-	private float timeSpeed = 0.016f;
-	private float gravity = 16.4f;
-	private float height = 0.14f;
-	private float y = 0;
+	
 	private void onJumpKey()
 	{
 		if(Input.GetKeyDown(KeyList.keyJump) && !isJumping && onGround)
-		{
-			onGround = false;
 			isJumping = true;
-			timeTotal = 0.0f;
-		}
-		if(Input.GetKeyUp(KeyList.keyJump) && !onGround)
-		{
-			timeTotal = 0;
-			vy_0 = 0;
-			gravity = 16.4f;
-			isJumping = false;
-		}
-
-		if(Input.GetKey(KeyList.keyJump) && isJumping)
-		{
-			//timeTotal = 0;
-			gravity = 16.4f;
-			vy_0 = Mathf.Sqrt(height * 2 * gravity);
-		}
-
-		if(onGround && !isJumping)
-		{
-			timeTotal = 0;
-			gravity = 0;
-			vy_0 = 0;
-		}
-
-		timeTotal += timeSpeed;	
-		y = (vy_0 * timeTotal) - 0.5f*(gravity * (timeTotal* timeTotal));
 	
-		gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y + y, gameObject.transform.position .z);
-	}
-	*/
-	
-	private void onJumpKey()
-	{
-		if(Input.GetKeyDown(KeyCode.Space) && !isJumping && onGround)
-		{
-			isJumping = true;
-			AlSprites.playAnimation("jump");
-		}
-		if(Input.GetKeyUp(KeyCode.Space))
-		{
+		if(Input.GetKeyUp(KeyList.keyJump))
 			isJumping = false;
-		}
-		
+
 		if(Input.GetKey(KeyList.keyJump) && isJumping)
 		{
 			if(onGround)
@@ -173,86 +114,58 @@ public class AlScript : MonoBehaviour {
 		}
 
 		else if(!onGround)
-		{
 			gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y - jumpSpeed, gameObject.transform.position .z);
-		}
+
 	}
 
 	private void onClimbKey()
 	{
-		if(Input.GetKey(KeyCode.DownArrow))
-		{
+		animate.SetBool("climbLadder", true);
+		if(Input.GetKey(KeyList.keyDown))
+		{	
 			gameObject.transform.position = new Vector3(startClimbPosition.x - 0.089f, gameObject.transform.position.y - climbSpeed, startClimbPosition.z);
-			spriteRender.sprite = AlSprites.AlClimb[imageIndex%4 + 2]; //AlClimb[imageIndex%4 + 2];
+			animate.speed = 1;
 		}
-
-		if(Input.GetKey(KeyCode.UpArrow))
-		{
+		else if(Input.GetKey(KeyList.keyUp))
+		{	
 			gameObject.transform.position = new Vector3(startClimbPosition.x - 0.089f, gameObject.transform.position.y + climbSpeed, startClimbPosition.z);
-			spriteRender.sprite = AlSprites.AlClimb[imageIndex%4 + 2];
+			animate.speed = 1;
+		}
+		else
+		{
+			animate.speed = 0;
 		}
 	}
 
-	private void climbStartClimbFunc()
+	private void climbStartClimbFunc(int frame)
 	{
-		spriteRender.sprite = AlSprites.AlClimb[imageIndex]; //AlClimb[imageIndex];
+		switch(frame)
+		{
+		case -1:
+			animate.SetBool("climbStart", false);
+			animate.SetBool("climbReverse", false);
+			animate.SetBool("climbLadder", false);
 
-		if(imageIndex == 0)
+			climbKeys = false;
+			animate.speed = 1;
+			onLadder = false;
+			isClimb = false;
+			break;
+		case 0:
+			gameObject.transform.position = new Vector3(gameObject.transform.position.x, startClimbPosition.y + 0.31f, startClimbPosition.z);
+			break;
+		case 1:
 			gameObject.transform.position = new Vector3(startClimbPosition.x, startClimbPosition.y - 0.090f, startClimbPosition.z);
-		else if(imageIndex == 1)
-			gameObject.transform.position = new Vector3(startClimbPosition.x, startClimbPosition.y - 0.365349f - 0.090f, startClimbPosition.z);
-		else if(imageIndex == 2)
-			gameObject.transform.position = new Vector3(startClimbPosition.x - 0.089f, startClimbPosition.y - 0.665349f, startClimbPosition.z);
-
-		if(imageIndex == 2)
-		{
-			imageIndex = 0;
-			climbStart = true;
+			break;
+		case 2:
+			gameObject.transform.position = new Vector3(startClimbPosition.x, startClimbPosition.y - 0.46f, startClimbPosition.z);
+			break;
+		case 3:
+			climbKeys = true;
+			gameObject.transform.position = new Vector3(startClimbPosition.x - 0.089f, startClimbPosition.y - 0.67f, startClimbPosition.z);
+			break;
 		}
-	}
 
-	private void climbRevFunc()
-	{
-		if(imageIndex > 0)
-			spriteRender.sprite = AlSprites.AlClimb[imageIndex]; 
-
-		if(imageIndex == 1)
-		{	
-			spriteRender.sprite = AlSprites.AlClimb[imageIndex]; 
-			gameObject.transform.position = new Vector3(startClimbPosition.x, startClimbPosition.y - 0.365349f - 0.090f, startClimbPosition.z);
-		}
-		else if(imageIndex == 0)
-		{	
-			spriteRender.sprite = AlSprites.AlClimb[imageIndex]; 
-			gameObject.transform.position = new Vector3(startClimbPosition.x, startClimbPosition.y - 0.090f, startClimbPosition.z);
-		}
-		else if(imageIndex < 0)
-		{
-			spriteRender.sprite = AlIdle;
-
-			gameObject.transform.position = new Vector3(gameObject.transform.position.x, startClimbPosition.y + 0.3f, startClimbPosition.z);
-
-			climbReverse = false;
-			climbStart = false;
-			climbBottom = false;
-
-			updateImageReverse = false;
-		}
-	}
-
-
-	void updateImage(bool isReverse = false)
-	{
-		if(time > imageSpeed)
-		{
-			time = 0;
-			if(!isReverse)
-				imageIndex = (imageIndex + 1);
-			else
-				imageIndex = (imageIndex - 1);
-		}
-		
-		time += Time.deltaTime;
 	}
 
 	//Collision objects response 
@@ -262,63 +175,21 @@ public class AlScript : MonoBehaviour {
 	//Crates
 	//Doors
 
-	void stopFall(Collider2D coll, string groundObj)
-	{
-		if(coll.gameObject.tag == groundObj)
-			onGround = true;
-	}
-
-	/*
-	void OnColliderEnter2D(Collider2D coll)
-	{
-		Debug.Log("collider");
-		if(coll.gameObject.tag == "Ground")
-			onGround = true;
-	}
-
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		Debug.Log("trigger");
-		if(coll.gameObject.tag == "Ground")
-		{	
-			timeTotal = 0;
-			gravity = 0;
-			vy_0 = 0;
-			onGround = true;
-		}
-	}
+		Debug.Log("tag " + coll.gameObject.tag);
 
-	void OnTriggerStay2D(Collider2D coll)
-	{
-		if(coll.gameObject.tag == "Ground")
-		{	
-			onGround = true;
-		}
-	}
-
-
-	void OnTriggerExit2D(Collider2D coll)
-	{
-		if(coll.gameObject.tag == "Ground")
-		{	
-			onGround = false;
-		}
-	}*/
-
-
-	void OnTriggerEnter2D(Collider2D coll)
-	{
 		if (coll.gameObject.renderer != null) 
-		{
-			if(coll.gameObject.tag == "Ground")
+			if(coll.gameObject.tag == "Ground" && !onLadder)
 				groundCollision (coll);
-		}
-
-		if(climbBottom)
-			isClimb = false;
 
 		if(coll.gameObject.tag == "Elements")
 			selectElements(coll.gameObject);
+
+		if(coll.gameObject.tag == "DeathSquare")
+		{	
+			Application.LoadLevel("GameOver");
+		}
 	}
 
 	void groundCollision(Collider2D coll)
@@ -357,44 +228,52 @@ public class AlScript : MonoBehaviour {
 	{
 		if (coll.gameObject.renderer != null) 
 		{
-			if(coll.gameObject.tag == "Ground")
+			if(coll.gameObject.tag == "Ground" && !onLadder)
 				groundCollision (coll);
+
+			if(ladderBottom)
+			{	
+				climbStartClimbFunc(-1);
+			}
 		}
 
-		if(coll.gameObject.tag =="LadderTop")
+		if(coll.gameObject.tag == "LadderTop")
 		{
-			if(Input.GetKeyDown(KeyCode.DownArrow) && !isClimb)
+			startClimbPosition = coll.gameObject.transform.position;
+
+			if(Input.GetKeyDown(KeyList.keyDown) && !isClimb)
 			{	
-				imageIndex = 0;
 				isClimb = true;
-				startClimbPosition = coll.gameObject.transform.position;
-				gameObject.transform.position = coll.gameObject.transform.position;
+				onLadder = true;
+				animate.SetBool("climbStart", true);
 			}
-			
-			if(Input.GetKey(KeyCode.UpArrow))
+			if(Input.GetKey(KeyList.keyUp) && isClimb)
 			{	
-				startClimbPosition = coll.gameObject.transform.position;
-				climbReverse = true;
-				updateImageReverse = true;
-				imageIndex = 2;
-				isClimb = false;
+				climbKeys = false;
+				animate.SetBool("climbLadder", false);
+
+				animate.speed = 1;
+				animate.SetBool("climbReverse", true);
 			}
 		}
-		
+
 		if(coll.gameObject.tag =="LadderBottom")
-		{	if(Input.GetKey(KeyCode.UpArrow) && !isClimb)
-			{	
-				startClimbPosition = coll.gameObject.transform.position;
-				climbStart = true;
+		{	
+			if(Input.GetKey(KeyList.keyUp) && !isClimb)
+			{
 				isClimb = true;
-				climbBottom = false;
+				onLadder = true;
+				climbKeys = true;
+				ladderBottom = false;
 			}
+
+			if(Input.GetKey(KeyList.keyDown) && isClimb)
+				ladderBottom = true;
 		}
+
 
 		if(coll.gameObject.tag == "Elements")
-		{
 			selectElements(coll.gameObject);
-		}
 	}
 	
 	void OnTriggerExit2D(Collider2D coll)

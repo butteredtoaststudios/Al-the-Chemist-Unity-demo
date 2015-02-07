@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class InventoryItem : ScriptableObject {
+public class InventoryItem {
 	
 	public string name = "";
 	public Texture2D[] itemSprite = new Texture2D[2];

@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MapLocation : MonoBehaviour {
+public class MapLocation {
 	
 	public string name = "";
 	public Texture2D[] locationSprite = new Texture2D[2];

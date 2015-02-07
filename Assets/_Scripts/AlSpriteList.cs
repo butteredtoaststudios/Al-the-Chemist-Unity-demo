@@ -119,7 +119,6 @@ public class AlSpriteList : MonoBehaviour {
 			break;
 		default:
 			spriteRend.sprite = AlIde;
-		//	Debug.Log("something went wrong with animation");
 			break;
 		}
 	}
