@@ -55,6 +55,7 @@
      <Compile Include="Assets\_Scripts\ChangeRoomScript.cs" />
      <Compile Include="Assets\_Scripts\CombinerDatabase.cs" />
      <Compile Include="Assets\_Scripts\CombinerItem.cs" />
+     <Compile Include="Assets\_Scripts\FallingRockClass.cs" />
      <Compile Include="Assets\_Scripts\GUI Scripts\DialogScript.cs" />
      <Compile Include="Assets\_Scripts\GUI Scripts\ElementInterfaceScript.cs" />
      <Compile Include="Assets\_Scripts\GameOverScript.cs" />

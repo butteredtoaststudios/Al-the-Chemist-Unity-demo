@@ -17,7 +17,7 @@ public class HealthScript : MonoBehaviour {
 	
 	void OnGUI()
 	{
-		if(health.Length > 0)
+		if(health.Length > 0 && go.playerHealth > 0)
 			GUI.Box(new Rect(20, 20, health[0].texture.width,  health[0].texture.height), health[go.playerHealth-1].texture, "");
 	}
 }

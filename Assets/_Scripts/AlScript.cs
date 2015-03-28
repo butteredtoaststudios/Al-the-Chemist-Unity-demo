@@ -177,8 +177,6 @@ public class AlScript : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D coll)
 	{
-		Debug.Log("tag " + coll.gameObject.tag);
-
 		if (coll.gameObject.renderer != null) 
 			if(coll.gameObject.tag == "Ground" && !onLadder)
 				groundCollision (coll);
@@ -274,6 +272,46 @@ public class AlScript : MonoBehaviour {
 
 		if(coll.gameObject.tag == "Elements")
 			selectElements(coll.gameObject);
+	}
+
+	public void AlIsHit()
+	{
+		if(!animate.GetBool("hit"))
+		{
+			animate.SetBool("hit", true);
+			go.playerHealth -= 1;
+
+			freezeAl = true;
+
+			StartCoroutine("AlHitWait");
+		}
+	}
+
+	private IEnumerator AlHitWait()
+	{
+		yield return new WaitForSeconds(1.0f);
+
+		animate.SetBool("hit", false);
+
+		freezeAl = false;
+	}
+
+	public void AlIsDead()
+	{
+		if(!animate.GetBool("dieOnce"))
+		{
+			animate.SetBool("hit", false);
+			animate.SetBool("dieOnce", true);
+			StartCoroutine("AlDeathWait");
+		}
+	}
+
+	private IEnumerator AlDeathWait()
+	{
+		yield return new WaitForSeconds(0.5f);
+		
+		animate.SetBool("dieOnce", false);
+		Application.LoadLevel("GameOver");
 	}
 	
 	void OnTriggerExit2D(Collider2D coll)

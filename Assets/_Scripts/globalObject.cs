@@ -9,7 +9,7 @@ public class globalObject : MonoBehaviour
 	public bool playerFaceRight = true;
 
 	public DialogScript diag;
-
+	private bool isPlayerDead = false;
 	// Use this for initialization
 	void Start () 
 	{
@@ -27,6 +27,12 @@ public class globalObject : MonoBehaviour
 	{
 		if(player == null)
 			player = Instantiate(Resources.Load("_Prefab/Al"), playerLocation, Quaternion.identity) as GameObject;
+
+		if(_Health < 1 && !isPlayerDead)
+		{	
+			player.GetComponent<AlScript>().AlIsDead();
+			isPlayerDead = true;
+		}
 	}
 
 	public int _Health
